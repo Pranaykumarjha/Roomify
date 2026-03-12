@@ -5,7 +5,7 @@ export const signOut = async () =>  puter.auth.signOut()
 export const getCurrentUser = async () => 
 {
     try{
-        await puter.auth.getUser()
+       return await puter.auth.getUser()
 
     }
     catch{

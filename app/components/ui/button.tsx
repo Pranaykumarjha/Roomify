@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { cn } from "../../lib/utils"
 
-export type ButtonVariant = "primary" | "secondary" | "destructive" | "ghost" | "link"
+export type ButtonVariant = "primary" | "secondary" | "destructive" | "ghost" | "link"|"outline"
 export type ButtonSize = "xs" | "sm" | "md" | "lg"
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
