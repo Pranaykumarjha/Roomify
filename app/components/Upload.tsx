@@ -26,7 +26,8 @@ const Upload = ({ onComplete }: UploadProps) => {
     setFile(selectedFile);
     setProgress(0);
     const reader = new FileReader();
-    reader.onerror = () => {
+    reader.onerror = ()=>
+    {
       setFile(null);
       setProgress(0);
     };
@@ -80,20 +81,17 @@ const Upload = ({ onComplete }: UploadProps) => {
     e.preventDefault();
     setIsDragging(false);
     if (!isSignedIn) return;
-    const droppedFile = e.dataTransfer.files;
-    const allowedTypes = ['image/jpeg', 'image/png'];
-    if (droppedFile && allowedTypes.includes(droppedFile[0].type)) {
-      processFile(droppedFile);
-    }
+    const files = e.dataTransfer.files;
+    processFile(files);
   };
 
   return (
     <div className='upload'>
       {!file ? (
         <div className={`dropzone ${isDragging ? 'isDragging' : ''}`}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}>
+             onDragOver={handleDragOver}
+             onDragLeave={handleDragLeave}
+             onDrop={handleDrop}>
           <input type="file" className="drop-input" accept='.jpeg,.jpg,.png'
             disabled={!isSignedIn} onChange={(e) => processFile(e.target.files)} />
           <div className="drop-content">
@@ -115,7 +113,7 @@ const Upload = ({ onComplete }: UploadProps) => {
           <div className='upload-status'>
             <div className="status-content">
               <div className="status-icon">
-                {progress === 100 ? (
+                {progress  === 100 ? (
                   <CheckCircle2 className='check' />
                 ) :
                   (
@@ -124,7 +122,7 @@ const Upload = ({ onComplete }: UploadProps) => {
               </div>
               <h3>{file.name}</h3>
               <div className="progress">
-                <div className="bar" style={{ width: `${progress}%` }} />
+                <div className="bar" style={{width : `${progress}%`}}/>
                 <p className="status-text">
                   {progress < 100 ? 'Analyzing floor plan...' : 'Redirecting...'}
                 </p>
