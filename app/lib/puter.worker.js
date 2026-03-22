@@ -23,7 +23,7 @@ const getUserId = async(userPuter) =>
    }
 }
 
-router.post('/api/project/save',async({request,user})=>{
+router.post('/api/projects/save',async({request,user})=>{
     try{
         const userPuter = user.puter
 
@@ -38,7 +38,7 @@ router.post('/api/project/save',async({request,user})=>{
             ...project ,
             updatedAt : new Date().toISOString() ,
         }
-        const userId = await getUserId(puterUser);
+        const userId = await getUserId(userPuter);
         if(!userId) return jsonError(401,'Authentication failed');
 
         const key = `${PROJECT_PREFIX}${project.id}`;

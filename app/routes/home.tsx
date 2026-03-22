@@ -55,15 +55,15 @@ export default function Home() {
     }
 
   };
-  useEffect(()=>
-  {
-    const fetchProjects = async () =>
-    {
-      const items = await getProjects();
-      setProjects(items);
-    }
-    fetchProjects();
-  },[])
+  // useEffect(()=>
+  // {
+  //   const fetchProjects = async () =>
+  //   {
+  //     const items = await getProjects();
+  //     setProjects(items);
+  //   }
+  //   fetchProjects();
+  // },[])
   return <div className="home">
     <Navbar />
     <section className="hero">
