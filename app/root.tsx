@@ -29,6 +29,15 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+export interface AuthContext {
+  isSignedIn: boolean;
+  userName: string | null;
+  userId: string | null;
+  refreshAuth: () => Promise<boolean>;
+  signIn: () => Promise<boolean>;
+  signOut: () => Promise<boolean>;
+}
+
 type AuthState = {
   isSignedIn: boolean;
   userName: string | null;
@@ -61,43 +70,55 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const [authState, setAuthState] = React.useState<AuthState>(DEFAULT_AUTH_STATE);
-  const refreshAuth = async () =>
-  {
-    try{
-      const user = await getCurrentUser() as { userName?: string; uuid?: string } | null;
+  const refreshAuth = async () => {
+    try {
+      const user = await getCurrentUser() as {
+        userName?: string;
+        username?: string;
+        uuid?: string;
+      } | null;
+      const userName = user?.userName || user?.username || null;
       setAuthState({
-        isSignedIn : !!user ,
-        userName : user?.userName || null ,
-        userId : user?.uuid || null
+        isSignedIn: !!user,
+        userName,
+        userId: user?.uuid || null,
       });
       return !!user;
-    
-    }
-    catch{
+    } catch (e) {
+      console.error("refreshAuth failed", e);
       setAuthState(DEFAULT_AUTH_STATE);
-      return false ;
+      return false;
     }
-  }
+  };
   useEffect(() => {
     refreshAuth();
   }, []);
 
-  const signIn = async () =>
-  {
-    await puterSignIn();
-    return await refreshAuth();
-  }
-  const signOut = async () =>
-  {
-    await puterSignOut();
-    return await refreshAuth();
-  }
-  return(<main className="min-h-screen bg-background text-foreground relative z-10">
-    <Outlet
-    context={{...authState,refreshAuth,signIn,signOut}} />;
-  </main>
+  const signIn = async () => {
+    try {
+      await puterSignIn();
+      return await refreshAuth();
+    } catch (e) {
+      console.error("signIn failed", e);
+      return false;
+    }
+  };
 
-  )
+  const signOut = async () => {
+    try {
+      await puterSignOut();
+      return await refreshAuth();
+    } catch (e) {
+      console.error("signOut failed", e);
+      return false;
+    }
+  };
+
+  return (
+    <main className="min-h-screen bg-background text-foreground relative z-10">
+      <Outlet context={{ ...authState, refreshAuth, signIn, signOut }} />
+    </main>
+  );
   
 }
 
