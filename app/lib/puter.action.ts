@@ -16,7 +16,7 @@ export const getCurrentUser = async () => {
     }
 }
 
-export const createProject = async ({ item, visibility = "private" }: CreateProjectParams): Promise<DesignItem | null | undefined> => {
+export const createProject = async ({ item , visibility = "private"}: CreateProjectParams): Promise<DesignItem | null | undefined> => {
     if (!PUTER_WORKER_URL) {
         console.warn('Missing Puter worker ur;skip history fetch;');
         return null;
@@ -60,25 +60,20 @@ export const createProject = async ({ item, visibility = "private" }: CreateProj
         renderedImage: resolvedRender
     }
     try {
-        const response = await puter.workers.exec(
-            `${PUTER_WORKER_URL}/api/projects/save`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    project: payLoad,
-                    visibility,
-                }),
-            }
-        );
-        if (!response.ok) {
-            console.error('Failed to save the project', await response.text());
-            return null;
+        const response = await puter.workers.exec(`${PUTER_WORKER_URL}/api/projects/save`, {
+            method: 'POST'
+            , headers: { 'Content-type': 'application/json',
+                body:JSON.stringify({project:payLoad,visibility})
+             }
         }
-        const data = (await response.json()) as { project?: DesignItem | null };
-        return data?.project ?? null;
+        );
+        if(!response.ok)
+        {
+            console.error('Failed to save the project', await response.text());
+            return null ;
+        }
+        const data = (await response.json()) as {project?: DesignItem | null};
+         return data?.project ?? null;
 
     } catch (e) {
         console.log('Failed to save project', e);
@@ -104,7 +99,6 @@ export const getProjects = async () => {
         return [];
     }
 }
-
 export const getProjectById = async ({ id }: { id: string }) => {
     if (!PUTER_WORKER_URL) {
         console.warn("Missing VITE_PUTER_WORKER_URL; skipping project fetch.");
